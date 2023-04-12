@@ -1,7 +1,9 @@
 # Project Schedule 
 ### TBD
+### 차트 최신화: https://docs.google.com/spreadsheets/d/1kvobkue-X7TuEak3JfJw5iGwY9QzACNj4sjfwsE5U5M/edit?usp=sharing
+
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/32115744/231449595-d1defc2e-be4e-4be0-a682-5f22aff6294a.png" />
+  <img src="https://user-images.githubusercontent.com/32115744/231461795-158cc66c-e0a7-42df-9900-b61e69bba862.png" />
 </p>
 
 
