@@ -2,7 +2,7 @@
 #### 차트 최신화: https://docs.google.com/spreadsheets/d/1kvobkue-X7TuEak3JfJw5iGwY9QzACNj4sjfwsE5U5M/edit?usp=sharing
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/32115744/231461795-158cc66c-e0a7-42df-9900-b61e69bba862.png" />
+  <img src="[https://user-images.githubusercontent.com/32115744/231461795-158cc66c-e0a7-42df-9900-b61e69bba862.png](https://user-images.githubusercontent.com/32115744/231462048-57c7c717-2a35-41f8-b33f-27604597264f.png)" />
 </p>
 
 
