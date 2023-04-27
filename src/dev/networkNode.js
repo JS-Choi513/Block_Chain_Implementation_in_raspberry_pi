@@ -6,6 +6,10 @@ const Blockchain = require('./blockchain');
 const uuid = require('uuid/v1');
 const port = process.argv[2];
 const rp = require('request-promise');
+const {MerkleTree} = require('./merkle_tree');
+const {MerkleNode} = require('./merkle_node');
+const {secureHash} = require('./util');
+
 //const port = [3000, 3001, 3002, 3003, 3004, 3005];
 const nodeAddress = uuid().split('-').join('');
 
@@ -18,7 +22,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // get entire blockchain
 app.get('/blockchain', function (req, res) {
-  res.send(bitcoin);
+  res.json(bitcoin);
 });
 
 // manipulate random block hash
@@ -74,9 +78,16 @@ app.get('/mine', function(req, res) {
 		transactions: bitcoin.pendingTransactions,
 		index: lastBlock['index'] + 1
 	};
-	const nonce = bitcoin.proofOfWork(previousBlockHash, currentBlockData);
-	const blockHash = bitcoin.hashBlock(previousBlockHash, currentBlockData, nonce);
-	const newBlock = bitcoin.createNewBlock(nonce, previousBlockHash, blockHash);
+    const mktree = new MerkleTree();
+    console.log(bitcoin.pendingTransactions);
+
+    mktree.nodes = mktree.leaves = bitcoin.pendingTransactions.map(s => new MerkleNode(s));
+    mktree.buildTree();
+    // root node hash? or root node?
+	//const nonce = bitcoin.proofOfWork(previousBlockHash, currentBlockData);
+    const nonce = bitcoin.proofOfWork(previousBlockHash, mktree.getRoot());
+	const blockHash = bitcoin.hashBlock(previousBlockHash, mktree.getRoot(), nonce);
+	const newBlock = bitcoin.createNewBlock(nonce, previousBlockHash, blockHash, mktree);
 
 	const requestPromises = [];
 	bitcoin.networkNodes.forEach(networkNodeUrl => {
@@ -100,7 +111,7 @@ app.get('/mine', function(req, res) {
 				sender: "00",
 				recipient: nodeAddress
 			},
-			json: true
+            json: true
 		};
 
 		return rp(requestOptions);
@@ -108,7 +119,7 @@ app.get('/mine', function(req, res) {
 	.then(data => {
 		res.json({
 			note: "New block mined & broadcast successfully",
-			block: newBlock
+			//block: newBlock
 		});
 	});
 });

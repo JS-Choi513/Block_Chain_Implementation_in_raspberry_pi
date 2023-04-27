@@ -8,9 +8,12 @@ class MerkleTree {
     this.nodes = []
     this.leaves = []
   }
-
+  getRoot(){
+      const root = this.rootNode;
+      return root;
+  }
   appendLeaf (arg) {
-    const node = (typeof arg === 'object')
+    const node = (typeof arg === 'string')
       ? new MerkleNode(arg) : arg
     this.nodes.push(node)
     this.leaves.push(node)
@@ -23,15 +26,39 @@ class MerkleTree {
   }
 
   buildTree (nodes) {
-    if (nodes === undefined) nodes = this.leaves
-    if (nodes.length === 1) this.rootNode = nodes[0]
+    if (nodes === undefined || Object.entries(nodes).length == 0){
+        console.log('undefined!');
+        nodes = this.leaves
+    }
+    if (nodes.length === 1|| Object.entries(nodes).length == 0 ){
+        if (Object.entries(nodes).length == 0) this.rootNode = '0';
+        else this.rootNode = nodes[0]
+
+        //console.log('length is 1');
+    }
     else {
       const parents = []
-      for (let i = 0; i < nodes.length; i += 2) {
+      for (let i = 0; i < nodes.length; i += 2) {// 0, 2, 4, 6
+        //console.log(i);
+          // 1, 3, 5
         const right = (i + 1 < nodes.length) ? nodes[i + 1] : null
+          // generate parents node i, i+1
+          //         p1 <- 0  1
+          //         p2 <- 2  3
+          //         p3 <- 4  5
+          //        (x) p4 <- 6  null
+          //  ------------ 1Phase------------
+          //         pp1 <- p1(0)  p2(1)
+          //         pp2 <- p3(2)  p4(3)
+          //
+          //  ------------ 2Phase------------
+          //        ppp1 <- pp1  pp2
+          //  ------------ 3Phase------------
+
         parents.push(new MerkleNode(nodes[i], right))
       }
-      this.buildTree(parents)
+      //console.log('parants lengths is... %d', parents.length);
+        this.buildTree(parents);
     }
   }
 
@@ -114,3 +141,5 @@ class MerkleTree {
 }
 
 module.exports = {MerkleTree}
+
+

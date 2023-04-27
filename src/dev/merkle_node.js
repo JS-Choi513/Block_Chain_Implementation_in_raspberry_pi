@@ -8,7 +8,9 @@ class MerkleNode {
     this.parent = null
     if (arguments.length === 1 && typeof arguments[0] === 'object') {
       // this is a leaf node
+      //console.log(arguments[0]);
       this.hash = secureHash(arguments[0])
+      //console.log(this.hash);
     } else {
       // this is a parent node
       this.leftNode = arguments[0]

@@ -1,9 +1,9 @@
 const sha256 = require('sha256');
 const currentNodeUrl = process.argv[3];
 const uuid = require('uuid/v1');
-const {MerkleTree} = require('./merkle_tree')
-const {MerkleNode} = require('./merkle_node')
-const {secureHash} = require('./util')
+const {MerkleTree} = require('./merkle_tree');
+const {MerkleNode} = require('./merkle_node');
+const {secureHash} = require('./util');
 
 
 function Blockchain() {
@@ -11,22 +11,24 @@ function Blockchain() {
 	this.pendingTransactions = [];
 	this.currentNodeUrl = currentNodeUrl;
 	this.networkNodes = [];
-
-	this.createNewBlock(100, '0', '0');
+    //how to set genesisblock merkle root?
+	this.createNewBlock(100, '0', '0', '0');
 };
 
 
-Blockchain.prototype.createNewBlock = function(nonce, previousBlockHash, hash) {
+Blockchain.prototype.createNewBlock = function(nonce, previousBlockHash, hash, mktree) {
 	const newBlock = {
 		index: this.chain.length + 1,
 		timestamp: Date.now(),
 		transactions: this.pendingTransactions,
 		nonce: nonce,
 		hash: hash,
-       // merkle_root: this.merkle,
+        // merkle_root value
+        merkle_root: (mktree == '0') ? '0' : mktree.getRoot(),
 		previousBlockHash: previousBlockHash
 	};
-   // this.merkle = new MerkleTree();
+    //if '/mine' initiate, pending transaction value mapped to merkle tree
+    this.merkle_tree = mktree;
 	this.pendingTransactions = [];
 	this.chain.push(newBlock);
 
@@ -58,27 +60,41 @@ Blockchain.prototype.addTransactionToPendingTransactions = function(transactionO
 	return this.getLastBlock()['index'] + 1;
 };
 
-
+/*
 Blockchain.prototype.hashBlock = function(previousBlockHash, currentBlockData, nonce) {
     //이 부분에서 트랜잭션 조작이 발생하면 해시값이 바뀜
 	const dataAsString = previousBlockHash + nonce.toString() + JSON.stringify(currentBlockData);
 	const hash = sha256(dataAsString);
 	return hash;
 };
+*/
 
+Blockchain.prototype.hashBlock = function(previousBlockHash, merkle_root, nonce){
+    const dataAsString = previousBlockHash + nonce.toString() + merkle_root.hash;
+    const hash = sha256(dataAsString);
+    return hash;
+};
 
-Blockchain.prototype.proofOfWork = function(previousBlockHash, currentBlockData) {
+/*
+Blockchain.prototype.proofOfWork = function(previousBlockHash, currentBlockDataa) {
 	let nonce = 0;
 	let hash = this.hashBlock(previousBlockHash, currentBlockData, nonce);
 	while (hash.substring(0, 4) !== '0000') {
 		nonce++;
 		hash = this.hashBlock(previousBlockHash, currentBlockData, nonce);
- //       console.log(hash);
 	}
-
 	return nonce;
 };
-
+*/
+Blockchain.prototype.proofOfWork = function(previousBlockHash, merkle_root) {
+	let nonce = 0;
+	let hash = this.hashBlock(previousBlockHash, merkle_root, nonce);
+	while (hash.substring(0, 4) !== '0000') {
+		nonce++;
+		hash = this.hashBlock(previousBlockHash, merkle_root, nonce);
+	}
+	return nonce;
+};
 
 
 Blockchain.prototype.chainIsValid = function(blockchain) {
