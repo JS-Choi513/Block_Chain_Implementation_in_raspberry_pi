@@ -1,0 +1,34 @@
+{
+  "name": "javaScript-blockchain",
+  "version": "1.0.0",
+  "description": "Learn Blockchain By Building Your Own In JavaScript",
+  "main": "index.js",
+  "scripts": {
+    "test2": "echo \"Error: no test specified\" && exit 1",
+    "node_1": "nodemon --watch dev -e js dev/networkNode.js 3001 http://192.9.202.31:3001",
+    "node_2": "nodemon --watch dev -e js dev/networkNode.js 3002 http://192.9.202.31:3002",
+    "node_3": "nodemon --watch dev -e js dev/networkNode.js 3003 http://192.9.202.31:3003",
+    "node_4": "nodemon --watch dev -e js dev/networkNode.js 3004 http://192.9.202.31:3004",
+    "node_5": "nodemon --watch dev -e js dev/networkNode.js 3005 http://192.9.202.31:3005",
+    "test": "npm-run-all -p -r node_1 node_2 node_3 node_4 node_5"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.18.2",
+    "merkletreejs": "^0.3.10",
+    "mocha": "^10.2.0",
+    "nodeman": "^1.1.2",
+    "nodemon": "^1.19.4",
+    "package-lock-only": "^0.0.4",
+    "request": "^2.87.0",
+    "request-promise": "^4.2.2",
+    "request-promise-core": "^1.1.4",
+    "sha256": "^0.2.0",
+    "uuid": "^3.4.0"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
+  }
+}
