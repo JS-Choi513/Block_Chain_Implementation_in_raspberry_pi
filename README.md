@@ -2,7 +2,7 @@
 #### 차트 최신화 Link: [Google spread sheet](https://docs.google.com/spreadsheets/d/1kvobkue-X7TuEak3JfJw5iGwY9QzACNj4sjfwsE5U5M/edit?usp=sharing)
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/32115744/231462048-57c7c717-2a35-41f8-b33f-27604597264f.png" />
+  <img src="https://user-images.githubusercontent.com/32115744/234739454-e19f00f0-5e70-4ab3-bae1-697cfa3d23dd.png" />
 </p>
 
 
