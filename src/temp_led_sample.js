@@ -12,19 +12,6 @@ ledGreen.digitalWrite(0); // Turn GREEN LED off
 ledBlue.digitalWrite(0); // Turn BLUE LED off
 //for common anode RGB LED  255 is fully off, and 0 is fully on, so we have to change the value from the client
 
-const sensor = {
-   sensors:[{name: "Indoor", type:22, pin:20} ],
-   read:function(){
-      for (var index in this.sensors){
-         var s = sensorLib.read(this.sensors[index].type, this.sensors[index].pin);
-         console.log(this.sensors[index].name + ": " + s.temperature.toFixed(1)+"°C," + s.humidity.toFixed(1) + "%");
-      ledRed.digitalWrite(1);
-      }
-      ledRed.digitalWrite(0);
-      setTimeout(function(){sensor.read();}, 2500);
-
-   }
-};
 
 const sensor = {
   sensors:[{name: "Indoor", type:22, pin:20} ],
