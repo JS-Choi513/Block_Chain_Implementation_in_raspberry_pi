@@ -7,11 +7,16 @@ const fetch = require('node-fetch');
 const rp = require('request-promise-native');
 var request = require('request');
 
-let busyport_idx = 10; 
-let block_count = 0;
-let transaction_count = 0;
+busyport_idx = 10; 
+block_count = 0;
+transaction_count = 0;
 
-
+function waitsec(sec){
+	let start = Date.now(), now = start;
+	while(now - start < sec * 1000){
+		now = Date.now();
+	}
+}
 
 function transaction(){
 	let rnd_node = Math.floor(Math.random() * port.length);
@@ -24,7 +29,7 @@ function transaction(){
 	console.log(currtemp);
 	console.log(url+port[rnd_node]+'/transaction/broadcast');
 	const newtransaction = {
-			amount: currtemp,
+			temperature: currtemp,
 			sender: rndsender,
 			recipient: rndrecipient,
 	};
@@ -39,7 +44,7 @@ function transaction(){
 			 'url': url+port[rnd_node]+'/transaction/broadcast',
 			'headers': {'Content-Type': 'application/json'},
 			body: JSON.stringify({
-				"amount": currtemp,
+				"temperature": currtemp,
 				"sender": rndsender,
 				"recipient": rndrecipient
 			})
@@ -49,16 +54,28 @@ function transaction(){
 
 function mine(){
 	let rnd_node = Math.floor(Math.random() * port.length);
-	let res = null; 
+	let res = null;
+   	//const requestOption = await { 
+	//	'method' : 'GET',
+//		'url': url+port[rnd_node]+'/mine'
+//	};
+	let requestOption = null;
 	fetch(url+port[rnd_node]+'/mine').then((response)=> res);
-	return res;
+	if(res == null){
+		console.log("Block generated...");
+		requestOption = res;
+		block_count +=1;
+	}
+	else console.log("error");
+	return requestOption;
+
 }
 
 
-console.log('asdasdasdadasdasdasdasdasdasdasd');
 //while(!(block_count == 1000)){
-const loop =  async () => {
-	while(!(transaction_count == 600)){
+const generate_transaction =  async () => {
+	//let minee = await mine();
+	while(!(transaction_count == 10)){
 	const apinfo = transaction();
 	console.log(apinfo);
     const reqpromise = [];
@@ -69,33 +86,42 @@ const loop =  async () => {
 		response = res.note;
 			}
 		});
+	waitsec(1);
+	transaction_count += 1;
+	console.log(transaction_count);
+
 	}
+//	await mine();
 };
-loop();
-//fetch(apinfo.url,{
-//  method: apinfo.method,
-//  body: apinfo}).then(res => res.json())
-//					  .then(res => {if(res.note){
-//						   console.log("dddsds");
-//						   console.log(res.note);
-//						  }
-//					  });
+
+async function act(){
+	console.log("act");
+	console.log(block_count);
+	if(block_count == 0){
+		console.log("blockcount is 0, mine init");
+		const initial  = await mine();
+		console.log(initial);
+	}
+	const transaction = await generate_transaction();
+	const genblock = await mine();
+}
+
+const main = async () => {
+	while(!(block_count > 3)){
+		await console.log("while blockcount is ...%d", block_count);
+		await act();
+		transaction_count = 0; 
+	}
+
+}
+
+main();
+
+//while(!(block_count == 3)){
+//	generate_transaction();
+	
+//	transaction_count = 0
 //}
-		//console.log('transaction value res is... (%s)', tranres);
-		
-	//	if(tranres == 'Transaction created and broadcast successfully.'){
-	//		transaction_count += 1;	
-//			console.log('Current # of pending transaction is ... %d', transaction_count);
-	//	}
-//	}
-//	console.log('Current transactions... %d', transaction_count);
-//	console.log('Generating new block...');
-//	let mineres = mine();
-//	console.log('mine res is ... (%s)', mineres); 
-//	if(mineres != null){
-//		block_count += 1;
-//		consile.log('Current # of block is... %d', block_count);
-//	}
-//}	
+
 
 
