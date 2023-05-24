@@ -9,7 +9,7 @@ class MerkleTree {
     this.leaves = []
   }
   getRoot(){
-      const root = this.rootNode;
+      const root = this.rootNode.hash;
       return root;
   }
   appendLeaf (arg) {

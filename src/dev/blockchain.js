@@ -7,7 +7,9 @@ const {secureHash} = require('./util');
 
 
 function Blockchain() {
-	this.chain = [];
+	this.blocknum = 0;
+    this.transactionnum = 0;
+    this.chain = [];
 	this.pendingTransactions = [];
 	this.currentNodeUrl = currentNodeUrl;
 	this.networkNodes = [];
@@ -28,7 +30,9 @@ Blockchain.prototype.createNewBlock = function(nonce, previousBlockHash, hash, m
 		previousBlockHash: previousBlockHash
 	};
     //if '/mine' initiate, pending transaction value mapped to merkle tree
-    this.merkle_tree = mktree;
+    //this.merkle_tree = mktree;
+    this.blocknum += 1;
+    this.transactionnum +=10;
 	this.pendingTransactions = [];
 	this.chain.push(newBlock);
 
@@ -43,7 +47,7 @@ Blockchain.prototype.getLastBlock = function() {
 
 Blockchain.prototype.createNewTransaction = function(amount, sender, recipient) {
 	const newTransaction = {
-		amount: amount,
+		temperature: amount,
 		sender: sender,
 		recipient: recipient,
 		transactionId: uuid().split('-').join('')
@@ -70,7 +74,7 @@ Blockchain.prototype.hashBlock = function(previousBlockHash, currentBlockData, n
 */
 
 Blockchain.prototype.hashBlock = function(previousBlockHash, merkle_root, nonce){
-    const dataAsString = previousBlockHash + nonce.toString() + merkle_root.hash;
+    const dataAsString = previousBlockHash + nonce.toString() + merkle_root;
     const hash = sha256(dataAsString);
     return hash;
 };
@@ -99,12 +103,12 @@ Blockchain.prototype.proofOfWork = function(previousBlockHash, merkle_root) {
 
 Blockchain.prototype.chainIsValid = function(blockchain) {
 	let validChain = true;
-
+    //console.log(blockchain);
 	for (var i = 1; i < blockchain.length; i++) {
 		const currentBlock = blockchain[i];
 		const prevBlock = blockchain[i - 1];
-		const blockHash = this.hashBlock(prevBlock['hash'], { transactions: currentBlock['transactions'], index: currentBlock['index'] }, currentBlock['nonce']);
-      	//const blockHash = this.hashBlock(prevBlock['hash'], { transactions: currentBlock['merkle_root'], index: currentBlock['index'] }, currentBlock['nonce']);
+		//const blockHash = this.hashBlock(prevBlock['hash'], { transactions: currentBlock['transactions'], index: currentBlock['index'] }, currentBlock['nonce']);
+      	const blockHash = this.hashBlock(prevBlock['hash'], currentBlock['merkle_root'], currentBlock['nonce']);
 
 		if (blockHash.substring(0, 4) !== '0000') validChain = false;
 		if (currentBlock['previousBlockHash'] !== prevBlock['hash']){
@@ -137,6 +141,14 @@ Blockchain.prototype.getBlock = function(blockHash) {
 	return correctBlock;
 };
 
+Blockchain.prototype.getBlocknumber = function(){
+//    let blocknumber = this.blocknum;
+    return this.blocknum;
+};
+
+Blockchain.prototype.getTransactionnumber = function(){
+    return this.transactionnum;
+}
 
 Blockchain.prototype.getTransaction = function(transactionId) {
 	let correctTransaction = null;
@@ -170,8 +182,8 @@ Blockchain.prototype.getAddressData = function(address) {
 
 	let balance = 0;
 	addressTransactions.forEach(transaction => {
-		if (transaction.recipient === address) balance += transaction.amount;
-		else if (transaction.sender === address) balance -= transaction.amount;
+		if (transaction.recipient === address) balance += transaction.temperature;
+		else if (transaction.sender === address) balance -= transaction.temperature;
 	});
 
 	return {

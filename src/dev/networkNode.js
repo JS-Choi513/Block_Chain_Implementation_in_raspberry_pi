@@ -1,4 +1,3 @@
-
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
@@ -22,6 +21,17 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 // get entire blockchain
 app.get('/blockchain', function (req, res) {
+// try{
+//      res.json(bitcoin);
+//  }
+
+//  catch{
+//      for(output in bitcoin){
+//          res.json(output);
+//      }
+//
+//  }
+
   res.json(bitcoin);
 });
 
@@ -33,6 +43,7 @@ app.get('/manipulate', function (req, res){
  let blk_length =  bitcoin.chain.length;
  // 1 ~ block lenght of current chain
  let target_blk_idx = Math.floor(Math.random()*(blk_length-2+1)) + 2;
+ console.log(bitcoin.chain[target_blk_idx].hash);
  bitcoin.chain[target_blk_idx].hash = 'This hash value have been contamination';
  res.send(bitcoin.chain[target_blk_idx].hash);
 });
@@ -48,7 +59,7 @@ app.post('/transaction', function(req, res) {
 
 // broadcast transaction
 app.post('/transaction/broadcast', function(req, res) {
-	const newTransaction = bitcoin.createNewTransaction(req.body.amount, req.body.sender, req.body.recipient);
+	const newTransaction = bitcoin.createNewTransaction(req.body.temperature, req.body.sender, req.body.recipient);
 	bitcoin.addTransactionToPendingTransactions(newTransaction);
 
 	const requestPromises = [];
@@ -107,7 +118,7 @@ app.get('/mine', function(req, res) {
 			uri: bitcoin.currentNodeUrl + '/transaction/broadcast',
 			method: 'POST',
 			body: {
-				amount: 12.5,
+                temperature: 0,
 				sender: "00",
 				recipient: nodeAddress
 			},
@@ -315,9 +326,9 @@ app.get('/detection', function(req, res) {
 });
 
 app.get('/recovery', function(req, res) {
-	const requestPromises = [];
+	const requestPromises = [];// excute by Promise()
 	bitcoin.networkNodes.forEach(networkNodeUrl => {
-		const requestOptions = {
+		const requestOptions = { // call get API
 			uri: networkNodeUrl + '/blockchain',
 			method: 'GET',
 			json: true
@@ -383,9 +394,25 @@ app.get('/block-explorer', function(req, res) {
 	res.sendFile('./block-explorer/index.html', { root: __dirname });
 });
 
+// get block number
+app.get('/blocknumber', function(req, res){
+    const block_number = bitcoin.getBlocknumber();
+    console.log(block_number);
 
+    res.json({
+        block_number: block_number
+    });
+});
 
+//get overall transaction number
+app.get('/transactionnumber', function(req, res){
+    const transaction_number = bitcoin.getTransactionnumber();
+    console.log(transaction_number);
+    res.json({
+        transaction_number: transaction_number
+    });
 
+});
 
 app.listen(port, function() {
 	console.log(`Listening on port ${port}...`);

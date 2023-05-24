@@ -1,6 +1,7 @@
 const sensorLib = require("node-dht-sensor");
-const Gpio = require('pigpio').Gpio; //include pigpio to interact with the GPIO
-
+var pigpio = require('pigpio'); //include pigpio to interact with the GPIO
+pigpio.configureSocketPort(8889);
+var Gpio = pigpio.Gpio;
 
 const temp_sensor = {};
 temp_sensor.wait = function waitsec(sec){

@@ -1,4 +1,8 @@
-const Gpio = require('pigpio').Gpio; //include pigpio to interact with the GPIO
+//const Gpio = require('pigpio').Gpio; //include pigpio to interact with the GPIO
+var pigpio = require('pigpio'); //include pigpio to interact with the GPIO
+pigpio.configureSocketPort(8888);
+var Gpio = pigpio.Gpio;
+
 const ledRed = new Gpio(25, {mode: Gpio.OUTPUT}); //use GPIO pin 4 as output for RED
 const ledGreen = new Gpio(24, {mode: Gpio.OUTPUT}); //use GPIO pin 17 as output for GREEN
 const ledBlue = new Gpio(23, {mode: Gpio.OUTPUT}); //use GPIO pin 27 as output for BLUE
