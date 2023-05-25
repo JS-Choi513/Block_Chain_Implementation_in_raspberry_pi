@@ -91,15 +91,11 @@ app.get('/mine', function(req, res) {
 	};
     const mktree = new MerkleTree();
     console.log(bitcoin.pendingTransactions);
-
     mktree.nodes = mktree.leaves = bitcoin.pendingTransactions.map(s => new MerkleNode(s));
     mktree.buildTree();
-    // root node hash? or root node?
-	//const nonce = bitcoin.proofOfWork(previousBlockHash, currentBlockData);
-    const nonce = bitcoin.proofOfWork(previousBlockHash, mktree.getRoot());
+        const nonce = bitcoin.proofOfWork(previousBlockHash, mktree.getRoot());
 	const blockHash = bitcoin.hashBlock(previousBlockHash, mktree.getRoot(), nonce);
 	const newBlock = bitcoin.createNewBlock(nonce, previousBlockHash, blockHash, mktree);
-
 	const requestPromises = [];
 	bitcoin.networkNodes.forEach(networkNodeUrl => {
 		const requestOptions = {
@@ -108,10 +104,8 @@ app.get('/mine', function(req, res) {
 			body: { newBlock: newBlock },
 			json: true
 		};
-
 		requestPromises.push(rp(requestOptions));
 	});
-
 	Promise.all(requestPromises)
 	.then(data => {
 		const requestOptions = {
