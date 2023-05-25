@@ -83,22 +83,18 @@ app.post('/transaction/broadcast', function(req, res) {
 
 // mine a block
 app.get('/mine', function(req, res) {
-	const lastBlock = bitcoin.getLastBlock();
-	const previousBlockHash = lastBlock['hash'];
-	const currentBlockData = {
-		transactions: bitcoin.pendingTransactions,
-		index: lastBlock['index'] + 1
-	};
+    const lastBlock = bitcoin.getLastBlock();
+    const previousBlockHash = lastBlock['hash'];
     const mktree = new MerkleTree();
     console.log(bitcoin.pendingTransactions);
     mktree.nodes = mktree.leaves = bitcoin.pendingTransactions.map(s => new MerkleNode(s));
     mktree.buildTree();
-        const nonce = bitcoin.proofOfWork(previousBlockHash, mktree.getRoot());
-	const blockHash = bitcoin.hashBlock(previousBlockHash, mktree.getRoot(), nonce);
-	const newBlock = bitcoin.createNewBlock(nonce, previousBlockHash, blockHash, mktree);
-	const requestPromises = [];
-	bitcoin.networkNodes.forEach(networkNodeUrl => {
-		const requestOptions = {
+    const nonce = bitcoin.proofOfWork(previousBlockHash, mktree.getRoot());
+    const blockHash = bitcoin.hashBlock(previousBlockHash, mktree.getRoot(), nonce);
+    const newBlock = bitcoin.createNewBlock(nonce, previousBlockHash, blockHash, mktree);
+    const requestPromises = [];
+    bitcoin.networkNodes.forEach(networkNodeUrl => {
+	const requestOptions = {
 			uri: networkNodeUrl + '/receive-new-block',
 			method: 'POST',
 			body: { newBlock: newBlock },
