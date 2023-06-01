@@ -86,7 +86,7 @@ function network_overwatch(){
 	}
 	else{
 		console.log('error');
-		requestOption = response
+		requestOption = respinse
 	}
 	return requestOption;
 }
@@ -104,7 +104,9 @@ async function act(){
 		const register = await register_and_broadcast_node();
 		first_register = 1;
 	}
+	console.time("Network recovery execution time");
 	const resoverwatch = await network_overwatch();
+	console.timeEnd("Network recovery execution time");
 	console.log(resoverwatch);
 	ledcon.set_stat(stat.normal);
 	wait(5);

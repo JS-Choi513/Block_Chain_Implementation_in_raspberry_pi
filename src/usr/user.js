@@ -89,7 +89,6 @@ function manipulation(){
 	if(res == null){
 		console.log("Block manipulate...");
 		requestOption = res;
-		block_count +=1;
 	}
 	else console.log("error");
 	return requestOption;
@@ -101,6 +100,7 @@ function manipulation(){
  */
 const generate_transaction =  async () => {
 	while(!(transaction_count == 10)){
+	console.time("Transaction execution time is ...");
 	const apinfo = transaction();
     const reqpromise = [];
 	reqpromise.push(rp(apinfo));
@@ -113,6 +113,7 @@ const generate_transaction =  async () => {
 	waitsec(1);
 	transaction_count += 1;
 	console.log(transaction_count);
+	console.timeEnd("Transaction execution time is ...");
 	}
 };
 
@@ -127,14 +128,16 @@ async function act(){
 		const initial  = await gen_new_block();
 	}
 	const transaction = await generate_transaction();
+	console.time("Block generation execution time is");
 	const genblock = await gen_new_block();
-	var manipulate = null;
-	if(block_count > 1) manipulate = await manipulation();
+	console.timeEnd("Block generation execution time is");
+//	var manipulate = null;
+//	if(block_count > 2) manipulate = await manipulation();
 }
 
 
 const main = async () => {
-	while(!(block_count > 10)){
+	while(!(block_count > 2000)){
 		await console.log("Current block number is...%d", block_count);
 		await act();
 		transaction_count = 0; 
