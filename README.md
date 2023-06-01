@@ -14,7 +14,7 @@
   * 블록체인 네트워크 안정성 평가 
 ## Project Requirements
 ![그림12](https://user-images.githubusercontent.com/32115744/231428624-e7becca6-3792-4107-ace6-cccae750064d.png)
-~~DHT22~~ → DHT11
+DHT22
 ## Environments Settings
 * #### H/W
 <img src="https://user-images.githubusercontent.com/32115744/231431333-cbd939b1-1e65-4136-9bcd-90ff5ab86453.png" width="600" height="200">
@@ -23,23 +23,16 @@
 <img src="https://user-images.githubusercontent.com/32115744/231431345-3fb75d44-10bb-4acc-965a-202b10ce1e1b.png" width="400" height="150">
 
 ## Architecture
-* ### Use-Case Diagram
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/32115744/231433435-7a8f7e1c-d4c9-499d-96f9-4bb2b918eead.png" width="700" height="500"/>
-</p>
+![architecture](https://github.com/JS-Choi513/Personal_DBM/assets/32115744/d3a7ab50-8d76-4ae9-b71a-7568d83c6525)
 
-* ### Overall design 
-![그림14](https://user-images.githubusercontent.com/32115744/231430420-03401799-9ef1-4867-b860-adae1393ced8.png)
-
+## Test scenario
 * ### Block chain Data structure
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/32115744/231435060-1d1ee219-2f0a-447e-85b7-64f61d156a2f.png" />
-</p>
+![scenario](https://github.com/JS-Choi513/Personal_DBM/assets/32115744/1665e9b1-faa5-4ea4-ab5b-a7111e54fc72)
 
-* ### Network Design
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/32115744/231436528-9aad6ce3-22a2-4ba3-b101-3ec740bad0d2.png" />
-</p>
+
+* ### Detail
+![detail](https://github.com/JS-Choi513/Personal_DBM/assets/32115744/87781ce8-0de9-4e0e-88ba-3ccfc0372176)
+
 
 * ### Cracking Module Design
 <p align="center">
@@ -47,10 +40,9 @@
 </p>
 
 ## Module Specification 
-###TBD
+### Mid_term_report.pdf 참조
 
 ## Experiment 
-* ### Parameter settings
-<img src="https://user-images.githubusercontent.com/32115744/231441454-5566b16c-756c-487d-bcac-e37da5126033.png" />
+### Final_report.pdf 참조
 
 
